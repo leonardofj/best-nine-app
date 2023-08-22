@@ -3,6 +3,7 @@ from datetime import datetime
 import json
 from data.user_sample import saved_posts
 import requests
+from lib.images_editing import create_collage
 
 
 def get_user_id(username: str) -> str:
@@ -86,3 +87,23 @@ def get_most_liked(username: str, year: int):
         encoded_img_data = base64.b64encode(data)
         item["picture"] = encoded_img_data.decode("utf-8")
     return pics_data
+
+
+def get_collage(username: str, year: int):
+    pics_data = []
+    user_id = get_user_id(username)
+    for pic in get_user_posts(user_id, year):
+        pic_data = {
+            "date": datetime.utcfromtimestamp(int(pic["taken_at_timestamp"])),
+            "title": pic["edge_media_to_caption"]["edges"][0]["node"]["text"],
+            "link": pic["display_url"],
+            "likes": pic["edge_media_preview_like"]["count"],
+        }
+        pics_data.append(pic_data)
+    pics_data = sorted(pics_data, key=lambda d: d["likes"], reverse=True)
+    pics_data = sorted(pics_data[:9], key=lambda d: d["date"])
+    images_list = []
+    for item in pics_data:
+        images_list.append(item["link"])
+
+    return create_collage(images_list)
