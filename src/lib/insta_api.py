@@ -1,7 +1,8 @@
 import base64
 from datetime import datetime
 import json
-from data.user_sample import saved_posts
+
+# from data.user_sample import saved_posts
 import requests
 from lib.images_editing import create_collage
 
@@ -39,20 +40,21 @@ def get_user_posts(user_id: str, year: int = 0):
         "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 12_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Instagram 105.0.0.11.118 (iPhone11,8; iOS 12_3_1; en_US; en-US; scale=2.00; 828x1792; 165586599)",
         "x-ig-app-id": "936619743392459",
     }
-    file_name = "data/output_"
-    file_count = 1
+    # file_name = "data/output_"
+    # file_count = 1
     while True:
         url = base_url + json.dumps(variables)
-        print("url", url)
+        # print("url", url)
         res = requests.get(url, headers=headers)
-        if res.status_code >= 400:
-            print(res.text)
-            posts = saved_posts["data"]["user"]["edge_owner_to_timeline_media"]
-        else:
-            # with open(f"{file_name}{file_count}.py", "w") as text_file:
-            #     text_file.write(str(res.json()))
-            file_count += 1
-            posts = res.json()["data"]["user"]["edge_owner_to_timeline_media"]
+        res.raise_for_status()
+        # if res.status_code >= 400:
+        #     print(res.text)
+        #     posts = saved_posts["data"]["user"]["edge_owner_to_timeline_media"]
+        # else:
+        # with open(f"{file_name}{file_count}.py", "w") as text_file:
+        #     text_file.write(str(res.json()))
+        # file_count += 1
+        posts = res.json()["data"]["user"]["edge_owner_to_timeline_media"]
         for post in posts["edges"]:
             if year:
                 post_date = datetime.utcfromtimestamp(
@@ -75,7 +77,9 @@ def get_most_liked(username: str, year: int):
     for pic in get_user_posts(user_id, year):
         pic_data = {
             "date": datetime.utcfromtimestamp(int(pic["taken_at_timestamp"])),
-            "title": pic["edge_media_to_caption"]["edges"][0]["node"]["text"],
+            "title": pic["edge_media_to_caption"]["edges"][0]["node"]["text"]
+            if pic["edge_media_to_caption"]["edges"]
+            else "",
             "link": pic["display_url"],
             "likes": pic["edge_media_preview_like"]["count"],
         }
@@ -95,11 +99,12 @@ def get_collage(username: str, year: int):
     for pic in get_user_posts(user_id, year):
         pic_data = {
             "date": datetime.utcfromtimestamp(int(pic["taken_at_timestamp"])),
-            "title": pic["edge_media_to_caption"]["edges"][0]["node"]["text"],
             "link": pic["display_url"],
             "likes": pic["edge_media_preview_like"]["count"],
         }
         pics_data.append(pic_data)
+    if len(pics_data) < 9:
+        raise Exception("Sorry, not enough pictures that year")
     pics_data = sorted(pics_data, key=lambda d: d["likes"], reverse=True)
     pics_data = sorted(pics_data[:9], key=lambda d: d["date"])
     images_list = []
