@@ -1,8 +1,6 @@
 import base64
 from datetime import datetime
 import json
-
-# from data.user_sample import saved_posts
 import requests
 from lib.images_editing import create_collage
 
@@ -19,18 +17,6 @@ def get_user_id(username: str) -> str:
     user = res.json()["data"]["user"]
     return user["id"]
 
-    # try:
-    #     res = requests.get(url, headers=headers)
-    #     if res.status_code >= 400:
-    #         print(res.text)
-    #         return "1693450027"
-    #     res.raise_for_status()
-    #     user = res.json()["data"]["user"]
-    #     return user["id"]
-    # except Exception as e:
-    #     print(e)
-    #     return "1693450027"
-
 
 def get_user_posts(user_id: str, year: int = 0):
     base_url = "https://www.instagram.com/graphql/query/?query_hash=e769aa130647d2354c40ea6a439bfc08&variables="
@@ -40,20 +26,10 @@ def get_user_posts(user_id: str, year: int = 0):
         "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 12_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Instagram 105.0.0.11.118 (iPhone11,8; iOS 12_3_1; en_US; en-US; scale=2.00; 828x1792; 165586599)",
         "x-ig-app-id": "936619743392459",
     }
-    # file_name = "data/output_"
-    # file_count = 1
     while True:
         url = base_url + json.dumps(variables)
-        # print("url", url)
         res = requests.get(url, headers=headers)
         res.raise_for_status()
-        # if res.status_code >= 400:
-        #     print(res.text)
-        #     posts = saved_posts["data"]["user"]["edge_owner_to_timeline_media"]
-        # else:
-        # with open(f"{file_name}{file_count}.py", "w") as text_file:
-        #     text_file.write(str(res.json()))
-        # file_count += 1
         posts = res.json()["data"]["user"]["edge_owner_to_timeline_media"]
         for post in posts["edges"]:
             if year:
