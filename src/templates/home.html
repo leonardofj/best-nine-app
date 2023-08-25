@@ -1,13 +1,12 @@
-<!doctype html>
+{% extends "base.html" %}
+
+{% block metatags %}
 <title>Best Nine App</title>
-<h1>Welcome to Best Nine!</h1>
-<br>
-<form action="/collage" method="get">
-    <label for="username">Username:</label>
-    <input type="text" name="username" id="username"><br>
+{% endblock %}
 
-    <label for="year">Year:</label>
-    <input type="number" name="year" id="year"><br>
-
-    <input type="submit" value="Submit">
-</form>
+{% block contents %}
+<div class="container">
+    <br>
+    <h1>Welcome to Best Nine!</h1>
+</div>
+{% endblock %}

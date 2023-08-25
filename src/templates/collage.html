@@ -1,5 +1,13 @@
-<!doctype html>
-<title>Best Nine App</title>
-<h1>Your Best Nine collage!</h1>
-<br>
-<img src="data:image/jpeg;base64,{{ collage }}">
+{% extends "base.html" %}
+
+{% block metatags %}
+<title>Best Nine Collage</title>
+{% endblock %}
+
+{% block contents %}
+<div class="container">
+    <h1>Your Best Nine collage!</h1>
+    <br>
+    <img src="data:image/jpeg;base64,{{ collage }}">
+</div>
+{% endblock %}
