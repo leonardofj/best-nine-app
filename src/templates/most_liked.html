@@ -1,11 +1,28 @@
-<!doctype html>
-<title>Best Nine App</title>
-<h1>Your Best Nine!</h1>
-<ul>
-    {% for post in posts %}
-    <li>
-        {{ post.title }}
-        <img src="data:image/jpeg;base64,{{ post.picture }}">
-    </li>
-    {% endfor %}
-</ul>
+{% extends "base.html" %}
+
+{% block metatags %}
+<title>Most liked</title>
+<meta name="description" content="Best Nine App">
+{% endblock %}
+
+{% block contents %}
+<div class="container">
+
+    <h1>Your Best Nine!</h1>
+
+    <div class="row row-cols-1 row-cols-md-3 g-3 mb-3">
+        {%for post in posts%}
+        <div class="col">
+            <div class="card h-100">
+                <img src="data:image/jpeg;base64,{{ post.picture }}">
+                <div class="card-body">
+                    <b class="card-title">{{post.date.strftime('%d/%m/%Y')}}</b>
+                    <p class="card-text">{{post.likes}} likes</p>
+                    <p class="card-text">{{post.title}}</p>
+                </div>
+            </div>
+        </div>
+        {%endfor%}
+    </div>
+</div>
+{% endblock %}

@@ -26,7 +26,9 @@ def most_liked():
     year = request.args.get("year", 2022)
     try:
         posts = get_most_liked(username, int(year))
-        return render_template("most_liked.html", posts=posts)
+        return render_template(
+            "most_liked.html", posts=posts, username=username, year=year
+        )
     except Exception as e:
         abort(404, e)
 
@@ -37,6 +39,8 @@ def collage():
     year = request.args.get("year", 2022)
     try:
         result = get_collage(username, int(year))
-        return render_template("collage.html", collage=result)
+        return render_template(
+            "collage.html", collage=result, username=username, year=year
+        )
     except Exception as e:
         abort(404, e)
