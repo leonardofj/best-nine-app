@@ -6,7 +6,7 @@ const get_most_liked = async (username, year) => {
     const user_id = await get_user_id(username);
     for await (const pic of get_user_posts(user_id, year)) {
         const pic_data = {
-            "date": new Date(pic.taken_at_timestamp * 1000).toLocaleDateString('en-GB'),
+            "date": new Date(pic.taken_at_timestamp * 1000),
             "title": pic.edge_media_to_caption.edges[0]?.node?.text || "",
             "link": pic.display_url,
             "likes": pic.edge_media_preview_like.count,
@@ -16,13 +16,14 @@ const get_most_liked = async (username, year) => {
 
     pics_data.sort((a, b) => b.likes - a.likes);
     pics_data = pics_data.slice(0, 9);
-    pics_data.sort((a, b) => moment(a.date).diff(moment(b.date)));
+    pics_data.sort((a, b) => a.date - b.date);
 
     for (const item of pics_data) {
         const { link } = item;
         const { data } = await axios.get(link, { responseType: 'arraybuffer' });
         const encoded_img_data = Buffer.from(data, 'binary').toString('base64');
         item.picture = encoded_img_data;
+        item.date = item.date.toLocaleDateString('en-GB');
     }
 
     return pics_data;
