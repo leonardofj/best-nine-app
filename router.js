@@ -14,7 +14,7 @@ router.get("/most-liked", async (ctx) => {
 router.get("/collage", async (ctx) => {
     const { username, year } = ctx.query;
     const collage = await get_collage(username, year);
-    console.log(collage);
+    // console.log(collage);
     await ctx.render('collage', { username: username, year: year, collage: collage });
 });
 router.get("/not-found", async (ctx) => {

@@ -1,5 +1,7 @@
 const axios = require('axios');
 const base64Img = require('base64-img');
+const { create_collage } = require('./image_editing.js');
+
 
 const get_most_liked = async (username, year) => {
     let pics_data = [];
@@ -33,9 +35,23 @@ const get_collage = async (username, year) => {
     let pics_data = [];
     const user_id = await get_user_id(username);
     for await (const post of get_user_posts(user_id, year)) {
-        console.log(post);
+        const pic_data = {
+            "date": new Date(post.taken_at_timestamp * 1000),
+            "link": post.display_url,
+            "likes": post.edge_media_preview_like.count,
+        };
+        pics_data.push(pic_data);
     }
-    return `I got ${user_id} for ${username}`;
+    if (pics_data.length < 9) {
+        throw new Error('Sorry, not enough pictures that year');
+    }
+    pics_data.sort((a, b) => b.likes - a.likes);
+    pics_data = pics_data.slice(0, 9);
+    pics_data.sort((a, b) => a.date - b.date);
+
+    const images_list = pics_data.map((item) => item.link);
+
+    return await create_collage(images_list);
 };
 
 const get_user_id = async (username) => {
@@ -50,8 +66,6 @@ const get_user_id = async (username) => {
         console.log(error);
         return '';
     }
-
-
 };
 
 
