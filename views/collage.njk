@@ -1,0 +1,15 @@
+{% extends "base.njk" %}
+
+{% block metatags %}
+    <title>Best Nine Collage</title>
+{% endblock %}
+
+{% block contents %}
+    <div class="container">
+        <h1>Your Best Nine collage!</h1>
+        <br>
+        <div class="overflow-auto">
+            <img src="data:image/jpeg;base64,{{ collage }}" alt="collage">
+        </div>
+    </div>
+{% endblock %}
