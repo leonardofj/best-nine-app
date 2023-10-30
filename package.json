@@ -20,9 +20,11 @@
     "@koa/cors": "^4.0.0",
     "axios": "^1.5.1",
     "base64-img": "^1.0.1",
+    "jimp": "^0.3.5",
     "koa": "^2.14.2",
     "koa-nunjucks-2": "^3.0.2",
     "koa-router": "^11.0.2",
+    "nf-photo-collage": "^1.4.0",
     "nunjucks": "^3.2.4",
     "sharp": "^0.32.6"
   },

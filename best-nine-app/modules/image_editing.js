@@ -1,49 +1,26 @@
 const axios = require("axios");
-const sharp = require("sharp");
+const fs = require("fs");
+const createCollage = require("nf-photo-collage");
 
-const create_collage = async (pictures) => {
+async function create_collage(pictures) {
   try {
-    const collage = sharp({
-      create: {
-        width: 1500,
-        height: 1500,
-        channels: 4,
-        background: { r: 255, g: 255, b: 255, alpha: 1 },
-      },
-    });
+    const options = {
+      sources: pictures,
+      width: 3, // number of images per row
+      height: 3, // number of images per column
+      imageWidth: 500, // width of each image
+      imageHeight: 500, // height of each image
+    };
 
-    const imagePromises = pictures.map(async (url) => {
-      const response = await axios.get(url, { responseType: "arraybuffer" });
-      if (response.status !== 200) {
-        throw new Error(`Failed to fetch image: ${url}`);
-      }
-
-      const imageStream = sharp(Buffer.from(response.data));
-      imageStream.resize(500, 500);
-      return imageStream.toBuffer();
-    });
-
-    const images = await Promise.all(imagePromises);
-
-    let x = 0;
-    let y = 0;
-
-    await Promise.all(
-      images.map(async (imageBuffer) => {
-        await collage.composite([{ input: imageBuffer, top: y, left: x }]);
-        x += 500;
-        if (x >= 1500) {
-          x = 0;
-          y += 500;
-        }
-      }),
-    );
-
-    const encoded_img_data = await collage.jpeg().toBuffer();
-    return encoded_img_data.toString("base64");
+    const canvas = await createCollage(options);
+    // const src = canvas.jpegStream();
+    // const dest = fs.createWriteStream("myFile.jpg");
+    // src.pipe(dest);
+    console.log(canvas.toBuffer("image/jpg"));
+    return canvas.toBuffer("image/png");
   } catch (error) {
     throw error;
   }
-};
+}
 
 module.exports = { create_collage };
