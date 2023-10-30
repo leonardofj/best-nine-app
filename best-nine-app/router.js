@@ -5,6 +5,7 @@ const router = new Router();
 router.get("/", async (ctx) => {
   await ctx.render("home");
 });
+
 router.get("/most-liked", async (ctx) => {
   const { username, year } = ctx.query;
   const posts = await get_most_liked(username, year);
@@ -15,6 +16,7 @@ router.get("/most-liked", async (ctx) => {
     posts: posts,
   });
 });
+
 router.get("/collage", async (ctx) => {
   const { username, year } = ctx.query;
   const collage = await get_collage(username, year);
@@ -23,20 +25,6 @@ router.get("/collage", async (ctx) => {
     username: username,
     year: year,
     collage: collage,
-  });
-});
-router.get("/not-found", async (ctx) => {
-  ctx.status = 404;
-  await ctx.render("error", {
-    title: "Page not found",
-    error: "Page not found!",
-  });
-});
-router.get("/error", async (ctx) => {
-  ctx.status = 500;
-  await ctx.render("error", {
-    title: "Error",
-    error: "Ops, something went wrong!",
   });
 });
 

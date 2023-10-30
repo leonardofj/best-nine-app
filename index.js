@@ -11,6 +11,26 @@ App.use(
   }),
 );
 
+App.use(async (ctx, next) => {
+  try {
+    await next();
+    if (ctx.status === 404) {
+      ctx.throw(404);
+    }
+  } catch (err) {
+    console.log(err);
+    const errorDetails = {};
+    if (ctx.status === 404) {
+      errorDetails.title = "Page not found";
+      errorDetails.error = "Page not found!";
+    } else {
+      errorDetails.title = "Error";
+      errorDetails.error = "Ops, something went wrong!";
+    }
+    await ctx.render("error", errorDetails);
+  }
+});
+
 App.use(router.routes());
 App.listen(port, () => {
   console.log(`🚀 Server listening http://127.0.0.1:${port}/ 🚀`);
