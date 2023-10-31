@@ -23,8 +23,8 @@
     "koa": "^2.14.2",
     "koa-nunjucks-2": "^3.0.2",
     "koa-router": "^11.0.2",
-    "nunjucks": "^3.2.4",
-    "sharp": "^0.32.6"
+    "nf-photo-collage": "^1.4.0",
+    "nunjucks": "^3.2.4"
   },
   "devDependencies": {
     "nodemon": "^3.0.1",
