@@ -1,5 +1,4 @@
 const axios = require("axios");
-const fs = require("fs");
 const createCollage = require("nf-photo-collage");
 
 async function create_collage(pictures) {
@@ -13,10 +12,6 @@ async function create_collage(pictures) {
     };
 
     const canvas = await createCollage(options);
-    // const src = canvas.jpegStream();
-    // const dest = fs.createWriteStream("myFile.jpg");
-    // src.pipe(dest);
-    console.log(canvas.toBuffer("image/jpg"));
     return canvas.toBuffer("image/png");
   } catch (error) {
     throw error;
