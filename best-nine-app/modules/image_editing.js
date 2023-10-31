@@ -1,7 +1,7 @@
 const axios = require("axios");
 const createCollage = require("nf-photo-collage");
 
-async function create_collage(pictures) {
+const create_collage = async (pictures) => {
   try {
     const options = {
       sources: pictures,
@@ -16,6 +16,6 @@ async function create_collage(pictures) {
   } catch (error) {
     throw error;
   }
-}
+};
 
 module.exports = { create_collage };
