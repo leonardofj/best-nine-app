@@ -47,10 +47,10 @@ const get_collage = async (username, year) => {
   pics_data.sort((a, b) => b.likes - a.likes);
   pics_data = pics_data.slice(0, 9);
   pics_data.sort((a, b) => a.date - b.date);
-
   const images_list = pics_data.map((item) => item.link);
+  const collage_done = await create_collage(images_list);
 
-  return await create_collage(images_list);
+  return Buffer.from(collage_done, "binary").toString("base64");
 };
 
 const get_user_id = async (username) => {
