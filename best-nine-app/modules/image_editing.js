@@ -1,4 +1,3 @@
-const axios = require("axios");
 const createCollage = require("nf-photo-collage");
 
 const create_collage = async (pictures) => {
@@ -14,6 +13,7 @@ const create_collage = async (pictures) => {
     const canvas = await createCollage(options);
     return canvas.toBuffer("image/png");
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };

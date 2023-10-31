@@ -19,13 +19,16 @@ App.use(async (ctx, next) => {
     }
   } catch (err) {
     console.log(err);
-    const errorDetails = {};
-    if (ctx.status === 404) {
-      errorDetails.title = "Page not found";
-      errorDetails.error = "Page not found!";
+    const { username, year } = ctx.query;
+    const errorDetails = { username: username, year: year };
+    if (err.status === 404) {
+      errorDetails.title = "Not found";
+      errorDetails.error = err.message;
+      errorDetails.message = "Please check the input values";
     } else {
       errorDetails.title = "Error";
-      errorDetails.error = "Ops, something went wrong!";
+      errorDetails.error = err.message || "Ops, something went wrong!";
+      errorDetails.message = "Please try again later";
     }
     await ctx.render("error", errorDetails);
   }

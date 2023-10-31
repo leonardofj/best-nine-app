@@ -9,7 +9,6 @@ router.get("/", async (ctx) => {
 router.get("/most-liked", async (ctx) => {
   const { username, year } = ctx.query;
   const posts = await get_most_liked(username, year);
-  // console.log(posts);
   await ctx.render("most_liked", {
     username: username,
     year: year,
@@ -20,7 +19,6 @@ router.get("/most-liked", async (ctx) => {
 router.get("/collage", async (ctx) => {
   const { username, year } = ctx.query;
   const collage = await get_collage(username, year);
-  // console.log(collage);
   await ctx.render("collage", {
     username: username,
     year: year,
