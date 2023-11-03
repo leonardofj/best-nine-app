@@ -1,6 +1,6 @@
-const createCollage = require("nf-photo-collage");
+const createPhotoCollage = require("nf-photo-collage");
 
-const create_collage = async (pictures) => {
+const createCollage = async (pictures) => {
   try {
     const options = {
       sources: pictures,
@@ -10,7 +10,7 @@ const create_collage = async (pictures) => {
       imageHeight: 500, // height of each image
     };
 
-    const canvas = await createCollage(options);
+    const canvas = await createPhotoCollage(options);
     return canvas.toBuffer("image/png");
   } catch (error) {
     console.log(error);
@@ -18,4 +18,4 @@ const create_collage = async (pictures) => {
   }
 };
 
-module.exports = { create_collage };
+module.exports = { createCollage };
